@@ -39,7 +39,7 @@ CineApp es una aplicación web desarrollada en Next.js que permite a los usuario
    npm run dev
    ```
 2. Abre tu navegador y ve a `http://localhost:3000` para interactuar con la aplicación.
-3. OPCIONAL, si deseas ver la aplicación desplegada en vercel, visita el siguiente [enlace](https://movies-tmdb-3y8avzwm6-rubenparras-projects.vercel.app/)
+3. OPCIONAL, si deseas ver la aplicación desplegada en vercel, visita el siguiente [enlace](https://movies-tmdb-api.vercel.app/)
 
 ## Despliegue
 
