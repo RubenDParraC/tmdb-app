@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CineApp - Prueba Técnica FrontEnd
 
-## Getting Started
+CineApp es una aplicación web desarrollada en Next.js que permite a los usuarios buscar películas, ver sus detalles y marcarlas como favoritas. Esta aplicación integra la API de The Movie Database (TMDb) para obtener información actualizada sobre películas.
 
-First, run the development server:
+## Requisitos
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 16 o superior
+- npm 7 o superior
+- Cuenta activa en [TMDb](https://www.themoviedb.org/)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Instalación
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clona este repositorio:
+   ```bash
+   https://github.com/RubenDParraC/tmdb-app.git
+   ```
+2. Ingresa al directorio del proyecto:
+   ```bash
+   cd tmdb-app
+   ```
+3. Instala las dependencias:
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Configuración
 
-## Learn More
+1. Crea un archivo `.env` en la raíz del proyecto.
+2. Añade las siguientes variables de entorno:
+   ```env
+   NEXT_PUBLIC_API_URL=https://api.themoviedb.org
+   NEXT_PUBLIC_BEARER_TMDB=eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMDU1MWZiMTFkNWIyMjVhN2NjYjE2MGI3YWU5YjZmYyIsIm5iZiI6MTczNjY0MDcwMC45MzIsInN1YiI6IjY3ODMwOGJjOTRmYzg3ZWY0ODdhZjUwZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LwbyQ6zyTUvlcTWoONu-a78ir17fPU-a9FftXW0PfKg
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+## Ejecución en Desarrollo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Inicia el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+2. Abre tu navegador y ve a `http://localhost:3000` para interactuar con la aplicación.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Despliegue
 
-## Deploy on Vercel
+Para desplegar la aplicación, utilicé la plataforma Vercel.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Funcionalidades
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Página de Inicio
+
+- Muestra una lista de películas populares obtenidas de la API de TMDb.
+- Implementación de paginación para manejar grandes cantidades de datos.
+
+### Barra de Búsqueda
+
+- Buscador de películas por título y muestra resultados paginados.
+
+### Detalles de la Película
+
+- Información completa de la película, incluyendo título, descripción, fecha de lanzamiento, puntuación, géneros y actores.
+- Visualización del listado de videos que sean tráiler (si están disponibles).
+
+### Favoritos
+
+- Permite a los usuarios marcar películas como favoritas y almacenarlas en el localStorage.
+- Lista de películas favoritas guardadas.
+
+### Diseño Responsivo
+
+- Enfoque mobile-first con un diseño minimalista y atractivo, adaptable a cualquier tamaño de pantalla.
+
+### SEO
+
+- Mejores prácticas de SEO, incluyendo meta tags, Open Graph tags, y URLs bien estructuradas.
+
+### Validaciones y Manejo de Errores
+
+- Validación de entradas del usuario y manejo adecuado de errores de la API.
+
+## Tecnologías
+
+- **Framework**: Next.js
+- **Lenguaje**: TypeScript
+- **Estilos**: TailwindCSS y CSS
+- **Calidad de Código**: ESLint y Prettier configurados
+
+## Recursos
+
+- [Documentación oficial de Next.js](https://nextjs.org/docs)
+- [API de The Movie Database (TMDb)](https://www.themoviedb.org/documentation/api)
+
+---
+
+¡Gracias por revisar este proyecto! Para cualquier consulta o comentario, no dudes en contactarme.
