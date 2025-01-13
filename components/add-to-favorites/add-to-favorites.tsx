@@ -9,39 +9,39 @@ import type { AddToFavoritesType } from "./types";
 import { FaHeart } from "react-icons/fa";
 
 function AddToFavorites({ movie }: AddToFavoritesType) {
-  // Estado para verificar si la película está en favoritos
+  // State to check if the movie is already in favorites
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
-    // Obtener el arreglo de películas del localStorage (si existe)
+    // Retrieve the list of favorite movies from localStorage (if available)
     const existingFavorites = JSON.parse(
       localStorage.getItem("favorites") || "[]"
     );
 
-    // Verificar si la película ya está en el arreglo
+    // Check if the movie is already in the list
     const isAlreadyFavorite = existingFavorites.some(
       (fav: MovieInterface) => fav.id === movie.id
     );
 
-    // Actualizar el estado
+    // Update the state
     setIsFavorite(isAlreadyFavorite);
   }, [movie]);
 
   const handleAddToFavorites = () => {
-    // Obtener el arreglo de películas del localStorage (si existe)
+    // Retrieve the list of favorite movies from localStorage (if available)
     const existingFavorites = JSON.parse(
       localStorage.getItem("favorites") || "[]"
     );
 
     if (isFavorite) {
-      // Si la película está en favoritos, eliminarla
+      // If the movie is in favorites, remove it
       const updatedFavorites = existingFavorites.filter(
         (fav: MovieInterface) => fav.id !== movie.id
       );
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-      setIsFavorite(false); // Actualizar el estado
+      setIsFavorite(false); // Update the state
     } else {
-      // Si no está en favoritos, agregarla
+      // If the movie is not in favorites, add it
       existingFavorites.push(movie);
       localStorage.setItem("favorites", JSON.stringify(existingFavorites));
       setIsFavorite(true);
@@ -53,7 +53,7 @@ function AddToFavorites({ movie }: AddToFavoritesType) {
       <button type="button" onClick={handleAddToFavorites}>
         <FaHeart
           className={twMerge(
-            isFavorite ? "text-red-600" : "text-zinc-500",
+            isFavorite ? "text-red-600" : "text-zinc-500", // Conditional classes based on favorite status
             "h-5 w-5"
           )}
         />

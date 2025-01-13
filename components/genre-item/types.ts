@@ -1,6 +1,7 @@
 // types
-import type { Genre } from "@/app/interfaces";
+import type { GenreInterface } from "@/app/interfaces";
 
+// Type definition for GenreItem component props
 export type GenreItemTypes = {
-  genre: Genre;
+  genre: GenreInterface; // genre prop is of type GenreInterface
 };

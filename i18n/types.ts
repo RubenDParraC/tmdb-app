@@ -1,25 +1,16 @@
-export type TranslationKeys =
-  | "header.home"
-  | "header.favorites"
-  | "pagination.page"
-  | "pagination.of"
-  | "search_bar.placeholder"
-  | "search_bar.button"
-  | "search_bar.banner_title"
-  | "search_bar.banner_description"
-  | "details.trailers"
-  | "details.see"
-  | "details.button"
-  | "details.button_cast"
-  | "error.title"
-  | "error.description"
-  | "favorites.info_title"
-  | "favorites.info_description";
+// Tipo para las claves de traducción. Esto está directamente relacionado con las claves de SectionsKeys
+export type TranslationKeys = keyof SectionsKeys extends string
+  ? `${keyof SectionsKeys & string}.${string}`
+  : never;
 
+// Interfaz que define las secciones y las claves de traducción correspondientes
 export interface SectionsKeys {
   header: {
     home: string;
     favorites: string;
+  };
+  home: {
+    seo_title: string;
   };
   pagination: {
     page: string;
@@ -30,6 +21,7 @@ export interface SectionsKeys {
     button: string;
     banner_title: string;
     banner_description: string;
+    seo_title: string;
   };
   details: {
     button: string;
@@ -47,6 +39,7 @@ export interface SectionsKeys {
   };
 }
 
+// Estructura de traducciones para los idiomas
 export interface Translations {
   ES: SectionsKeys;
   EN: SectionsKeys;

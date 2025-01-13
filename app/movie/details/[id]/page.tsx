@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import useSWR from "swr";
 import { t } from "@/i18n/i18n";
 import { fetcher } from "@/api/fetcher";
 
-// context
+// Context
 import { useLanguage } from "@/context/language-context/language-context";
 
-// types
+// Types
 import type { MovieDetailsParams } from "./types";
 import type {
   CreditsInterface,
@@ -18,30 +18,34 @@ import type {
   VideosListInterface,
 } from "@/app/interfaces";
 
-// utils
+// Utils
 import { formatDate } from "@/app/utils";
 import { getGenreNames, getTrailers } from "./utils";
 
-// components
+// Components
 import Modal from "@/components/modal/modal";
 import Skeleton from "@/components/skeleton/skeleton";
 import ActorItem from "@/components/actor-item/actor-item";
 import GenreItem from "@/components/genre-item/genre-item";
 import AlertBanner from "@/components/alert-banner/alert-banner";
 import TrailerItem from "@/components/trailer-item/trailer-item";
-
-// external components
-import { FaEye, FaStar } from "react-icons/fa";
-import { FaCirclePlay } from "react-icons/fa6";
 import AddToFavorites from "@/components/add-to-favorites/add-to-favorites";
 
-function MovieDetails({ params }: { params: MovieDetailsParams }) {
+// External Components
+import { FaEye, FaStar } from "react-icons/fa";
+import { FaCirclePlay } from "react-icons/fa6";
+
+function MovieDetails({ params }: { params: Promise<MovieDetailsParams> }) {
   const { language } = useLanguage();
-  const [movieId, setMovieId] = useState<string | undefined>(undefined);
+
+  // Desestructuramos el parámetro usando React.use()
+  const { id: movieId } = use(params);
+
   const [isOpenTrailer, setIsOpenTrailer] = useState<boolean>(false);
   const [isOpenActors, setIsOpenActors] = useState<boolean>(false);
   const [selectedTrailer, setSelectedTrailer] = useState<string | null>(null);
 
+  // Fetch genres, movie details, videos, and credits
   const {
     data: genres,
     error: genresError,
@@ -93,15 +97,23 @@ function MovieDetails({ params }: { params: MovieDetailsParams }) {
     ? getGenreNames(movie?.genres || [], genres.genres)
     : [];
 
+  // SEO: Dynamically update page title and meta description
   useEffect(() => {
-    const fetchParams = async () => {
-      const resolvedParams = await params;
-      setMovieId(resolvedParams.id);
-    };
+    if (movie) {
+      document.title = movie.title;
+      const metaDescription = document.querySelector(
+        "meta[name='description']"
+      );
+      if (metaDescription) {
+        metaDescription.setAttribute(
+          "content",
+          movie.overview || "Movie details page."
+        );
+      }
+    }
+  }, [movie]);
 
-    fetchParams();
-  }, [params]);
-
+  // Handle loading state
   if (isLoading || videoLoading || genresIsLoading || creditsLoading) {
     return (
       <div className="w-full flex flex-col p-10 md:px-24 md:py-16">
@@ -115,12 +127,13 @@ function MovieDetails({ params }: { params: MovieDetailsParams }) {
     );
   }
 
+  // Handle errors
   if (error || videoError || genresError || creditsError) {
     return (
       <div className="w-full h-screen flex justify-center items-center p-10 md:px-24 md:py-16">
         <AlertBanner
-          title="Ups!, parece que ocurrió un error al obtener la información."
-          description="Recarga para intentar nuevamente"
+          title={t("error.title", language)}
+          description={t("error.description", language)}
         />
       </div>
     );

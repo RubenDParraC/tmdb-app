@@ -1,66 +1,82 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { t } from "@/i18n/i18n";
 import { fetcher } from "../api/fetcher";
 
-// components
+// Components
 import Skeleton from "@/components/skeleton/skeleton";
 import SearchBar from "@/components/search-bar/search-bar";
 import MovieItem from "@/components/movie-item/movie-item";
 import Pagination from "@/components/pagination/pagination";
 import AlertBanner from "@/components/alert-banner/alert-banner";
 
-// context
+// Context
 import { useLanguage } from "@/context/language-context/language-context";
 
-// types
+// Types
 import type { MovieInterface, MovieListInterface } from "./interfaces";
 
 export default function Home() {
   const { language } = useLanguage();
 
+  // Estado para paginación y búsqueda
   const [page, setPage] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeQuery, setActiveQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
+  // Fetch de películas
   const {
     data: movies,
     error,
     isLoading,
   } = useSWR<MovieListInterface>(
     isSearching
-      ? `/3/search/movie?query=${activeQuery}&include_adult=false&language=${
+      ? `/3/search/movie?query=${encodeURIComponent(
+          activeQuery.trim()
+        )}&include_adult=false&language=${
           language === "EN" ? "en-US" : "es-CO"
         }&page=${page}`
       : `/3/movie/popular?language=${
           language === "EN" ? "en-US" : "es-CO"
         }&page=${page}`,
     fetcher,
-    { revalidateOnFocus: true } // No hacer revalidación automáticamente cuando el foco cambie
+    { revalidateOnFocus: true }
   );
 
-  // Maneja el cambio del campo de búsqueda
+  // Actualización del título de la página para SEO
+  useEffect(() => {
+    document.title = isSearching
+      ? `${t("search_bar.seo_title", language)}: ${activeQuery}`
+      : t("home.seo_title", language);
+  }, [isSearching, activeQuery, language]);
+
+  /**
+   * Maneja el cambio de la barra de búsqueda.
+   * @param e - Evento de cambio de input.
+   */
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
-  // Maneja el clic en el botón de buscar
+  /**
+   * Activa la búsqueda basada en el query ingresado.
+   */
   const handleSearchClick = () => {
     if (searchQuery.trim() === "") {
-      setIsSearching(false); // Si el campo de búsqueda está vacío, mostrar las películas populares
-      setActiveQuery(""); // Limpiar la búsqueda activa
-      setPage(1); // Reiniciar la página a 1 al hacer búsqueda
+      setIsSearching(false);
+      setActiveQuery("");
+      setPage(1);
     } else {
-      setIsSearching(true); // Activar el estado de búsqueda
-      setActiveQuery(searchQuery); // Actualizar la búsqueda activa
-      setPage(1); // Reiniciar la página a 1 al hacer búsqueda
+      setIsSearching(true);
+      setActiveQuery(searchQuery);
+      setPage(1);
     }
   };
 
-  // Si hay error
+  // Muestra un banner de error si ocurre un problema al cargar datos
   if (error) {
     return (
       <div className="w-full flex justify-center p-10 md:px-24 md:py-16 mt-16">
@@ -72,7 +88,7 @@ export default function Home() {
     );
   }
 
-  // Si los datos están cargando
+  // Muestra los placeholders de carga mientras se obtienen los datos
   if (isLoading) {
     return (
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 gap-y-12 p-10 md:px-24 md:py-16 mt-16">
@@ -89,35 +105,37 @@ export default function Home() {
 
   return (
     <div className="w-full flex flex-col gap-8 p-10 md:px-24 md:py-16 mt-16">
+      {/* Barra de búsqueda */}
       <SearchBar
         searchQuery={searchQuery}
         handleSearchChange={handleSearchChange}
         handleSearchClick={handleSearchClick}
       />
 
+      {/* Paginación superior */}
       <Pagination
         page={page}
         setPage={setPage}
         total_pages={movies?.total_pages ?? 0}
       />
 
-      {!movies?.results.length ? (
+      {/* Banner de resultados vacíos */}
+      {!movies?.results.length && (
         <AlertBanner
           variant="info"
           title={`${t("search_bar.banner_title", language)}: "${searchQuery}"`}
           description={t("search_bar.banner_description", language)}
         />
-      ) : null}
+      )}
 
-      <div
-        className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
-        style={{ minHeight: "0" }}
-      >
-        {movies?.results?.map((movie: MovieInterface) => (
+      {/* Lista de películas */}
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {movies?.results.map((movie) => (
           <MovieItem key={`movie-${movie.id}`} movie={movie} />
         ))}
       </div>
 
+      {/* Paginación inferior */}
       <Pagination
         page={page}
         setPage={setPage}

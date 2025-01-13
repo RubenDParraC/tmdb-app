@@ -12,7 +12,11 @@ export const translations: Translations = {
       page: "Página",
       of: "de",
     },
+    home: {
+      seo_title: "Peliculas populares",
+    },
     search_bar: {
+      seo_title: "Buscar resultados",
       placeholder: "Buscar peliculas...",
       button: "Buscar",
       banner_title: "No hay resultados de la búsqueda",
@@ -43,7 +47,11 @@ export const translations: Translations = {
       page: "Page",
       of: "of",
     },
+    home: {
+      seo_title: "Popular Movies",
+    },
     search_bar: {
+      seo_title: "Search Results",
       placeholder: "Search for movies...",
       button: "Search",
       banner_title: "No search results",

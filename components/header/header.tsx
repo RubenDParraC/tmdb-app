@@ -19,38 +19,38 @@ import { useLanguage } from "@/context/language-context/language-context";
 
 function Header() {
   const { language, setLanguage } = useLanguage();
-  const [enabled, setEnabled] = useState(false);
-  const [open, setOpen] = useState<boolean>(false);
-  const [isVisible, setIsVisible] = useState<boolean>(true);
-  const [lastScrollY, setLastScrollY] = useState<number>(0);
+  const [enabled, setEnabled] = useState(false); // State to track the language switch
+  const [open, setOpen] = useState<boolean>(false); // State to track the mobile menu open/close
+  const [isVisible, setIsVisible] = useState<boolean>(true); // State to track header visibility
+  const [lastScrollY, setLastScrollY] = useState<number>(0); // State to track scroll position
 
   const handleChange = (value: boolean) => {
     setEnabled(value);
-    setLanguage(value ? "EN" : "ES");
+    setLanguage(value ? "EN" : "ES"); // Update language based on switch value
   };
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // Mostrar el Header al desplazarse hacia arriba, ocultarlo al desplazarse hacia abajo
+      // Show the header when scrolling up, hide when scrolling down
       if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        setIsVisible(false); // Ocultar Header
+        setIsVisible(false); // Hide header when scrolling down
       } else {
-        setIsVisible(true); // Mostrar Header
+        setIsVisible(true); // Show header when scrolling up
       }
 
-      setLastScrollY(currentScrollY);
+      setLastScrollY(currentScrollY); // Update last scroll position
     };
 
-    // Añadir el evento de scroll
+    // Add scroll event listener
     window.addEventListener("scroll", handleScroll);
 
-    // Limpiar el evento de scroll al desmontar
+    // Cleanup scroll event listener
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [lastScrollY]);
+  }, [lastScrollY]); // Dependency to rerun on scroll position change
 
   return (
     <div

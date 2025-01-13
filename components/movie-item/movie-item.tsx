@@ -17,6 +17,7 @@ function MovieItem({ movie }: MovieItemTypes) {
     <div className="relative w-full hover:scale-105 transition-transform duration-300 ease-in-out hover:shadow-md hover:shadow-purple-600">
       <div className="w-full">
         <div className="overflow-hidden rounded-lg">
+          {/* Render movie poster or a fallback image if not available */}
           {movie.poster_path ? (
             <Image
               src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
@@ -40,6 +41,8 @@ function MovieItem({ movie }: MovieItemTypes) {
           )}
         </div>
       </div>
+
+      {/* Link to the movie details page */}
       <Link
         href={`/movie/details/${movie.id}`}
         className="absolute inset-0 z-10 flex flex-col items-center justify-end p-4"
@@ -50,24 +53,30 @@ function MovieItem({ movie }: MovieItemTypes) {
           </h1>
           <div className="w-full flex flex-row justify-between items-center">
             <span className="text-xs text-white">
-              {formatDate(movie.release_date)}
+              {formatDate(movie.release_date)}{" "}
+              {/* Format and display the release date */}
             </span>
             <div className="flex flex-row items-center gap-2">
               <span className="text-sm font-bold text-white">
-                {Math.ceil(movie.vote_average)}
+                {Math.ceil(movie.vote_average)}{" "}
+                {/* Display rounded vote average */}
               </span>
-              <FaStar className="h-5 w-5 text-yellow-300" />
+              <FaStar className="h-5 w-5 text-yellow-300" /> {/* Star icon */}
             </div>
           </div>
           <div className="flex flex-row items-center gap-2 mt-2">
-            <FaEye className="h-4 w-4 text-white" />
+            <FaEye className="h-4 w-4 text-white" />{" "}
+            {/* Eye icon for popularity */}
             <span className="text-xs text-white">{movie.popularity}</span>
           </div>
         </div>
       </Link>
+
+      {/* Add to favorites button */}
       <div className="absolute inset-0 z-20 p-4 h-14 w-14 justify-self-end">
         <div className="flex justify-end w-full">
-          <AddToFavorites movie={movie} />
+          <AddToFavorites movie={movie} />{" "}
+          {/* Component to add movie to favorites */}
         </div>
       </div>
     </div>
