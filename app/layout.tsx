@@ -34,7 +34,7 @@ export default function RootLayout({
     <html lang="en">
       {/* Language context provider */}
       <LanguageProvider>
-        <body className="bg-zinc-800">
+        <body className="bg-zinc-800 max-w-[1456px] justify-self-center">
           {/* Global header */}
           <Header />
           {/* Page content */}

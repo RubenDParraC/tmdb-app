@@ -58,11 +58,12 @@ function Header() {
   return (
     <div
       className={twMerge(
-        "w-full h-20 px-10 lg:px-32 py-6 bg-zinc-800 transition-transform duration-300 rounded-b-xl top-0 left-0 z-50 fixed",
+        "w-full h-20 px-10 lg:px-32 py-6 bg-zinc-800 transition-transform duration-300 rounded-b-xl top-0 left-0 z-50 fixed max-w-[1456px] right-0",
         isVisible
           ? "transform translate-y-0 shadow-sm shadow-purple-600"
           : "transform -translate-y-full"
       )}
+      style={{ position: "fixed", margin: "0 auto" }}
     >
       <div className="w-full flex flex-row justify-between items-center">
         <Link href="/">
