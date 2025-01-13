@@ -17,6 +17,9 @@ import { buttonsList } from "./utils";
 // context
 import { useLanguage } from "@/context/language-context/language-context";
 
+// Importar Image de Next.js
+import Image from "next/image";
+
 function Header() {
   const { language, setLanguage } = useLanguage();
   const [enabled, setEnabled] = useState(false); // State to track the language switch
@@ -76,10 +79,12 @@ function Header() {
             </Link>
           ))}
           <div className="flex flex-row gap-2 items-center border-l-2 pl-4 border-l-purple-600">
-            <img
+            <Image
               alt="ES"
               className="h-5 w-5 overflow-hidden rounded-full"
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRt3Sl5fzm1cRfdoG-Pngt6ixByHUuA4kuFjRkL6z_mRhFY_zxV3-7ZU25U_qDRxkyhz0&usqp=CAU"
+              width={20}
+              height={20}
             />
             <Switch
               checked={enabled}
@@ -94,10 +99,12 @@ function Header() {
                 }`}
               />
             </Switch>
-            <img
+            <Image
               alt="EN"
               className="h-5 w-5 overflow-hidden rounded-full"
               src="https://img.freepik.com/foto-gratis/fondo-bandera-estados-unidos-america_23-2148157263.jpg?semt=ais_hybrid"
+              width={20}
+              height={20}
             />
           </div>
         </div>
@@ -118,10 +125,12 @@ function Header() {
           </Link>
           <div className="flex flex-row items-center gap-3">
             <div className="flex flex-row gap-2 items-center border-r-2 pr-4 border-r-purple-600">
-              <img
+              <Image
                 alt="ES"
                 className="h-5 w-5 overflow-hidden rounded-full"
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRt3Sl5fzm1cRfdoG-Pngt6ixByHUuA4kuFjRkL6z_mRhFY_zxV3-7ZU25U_qDRxkyhz0&usqp=CAU"
+                width={20}
+                height={20}
               />
               <Switch
                 checked={enabled}
@@ -136,10 +145,12 @@ function Header() {
                   }`}
                 />
               </Switch>
-              <img
+              <Image
                 alt="EN"
                 className="h-5 w-5 overflow-hidden rounded-full"
                 src="https://img.freepik.com/foto-gratis/fondo-bandera-estados-unidos-america_23-2148157263.jpg?semt=ais_hybrid"
+                width={20}
+                height={20}
               />
             </div>
             <MdClose

@@ -33,12 +33,12 @@ function TrailerItem({
           console.error("Failed to set trailer:", error);
         }
       }}
-      className="flex flex-row items-center gap-2" // Flexbox layout for icon and text
+      className="flex flex-row items-center gap-2"
     >
       <FaRegCirclePlay className="w-5 h-5 text-white" /> {/* Play icon */}
       <span className="text-sm text-white font-bold uppercase text-left">
         {/* Translating the button text dynamically based on the language */}
-        {t("details.see", language)} "{trailer.name}"
+        {t("details.see", language)} &quot;{trailer.name}&quot;
       </span>
     </button>
   );

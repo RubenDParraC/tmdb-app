@@ -31,7 +31,7 @@ function Favorites() {
         ) as MovieInterface[];
         setMovies(storedMovies);
       }
-    } catch (err) {
+    } catch {
       setError(true);
     } finally {
       setIsLoading(false);

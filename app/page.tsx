@@ -21,13 +21,13 @@ import type { MovieInterface, MovieListInterface } from "./interfaces";
 export default function Home() {
   const { language } = useLanguage();
 
-  // Estado para paginación y búsqueda
+  // State for pagination and search
   const [page, setPage] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeQuery, setActiveQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
-  // Fetch de películas
+  // Fetching movie data
   const {
     data: movies,
     error,
@@ -46,7 +46,7 @@ export default function Home() {
     { revalidateOnFocus: true }
   );
 
-  // Actualización del título de la página para SEO
+  // Update the page title for SEO
   useEffect(() => {
     document.title = isSearching
       ? `${t("search_bar.seo_title", language)}: ${activeQuery}`
@@ -54,15 +54,15 @@ export default function Home() {
   }, [isSearching, activeQuery, language]);
 
   /**
-   * Maneja el cambio de la barra de búsqueda.
-   * @param e - Evento de cambio de input.
+   * Handles the search bar input change.
+   * @param e - Input change event.
    */
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
   /**
-   * Activa la búsqueda basada en el query ingresado.
+   * Activates search based on the entered query.
    */
   const handleSearchClick = () => {
     if (searchQuery.trim() === "") {
@@ -76,7 +76,7 @@ export default function Home() {
     }
   };
 
-  // Muestra un banner de error si ocurre un problema al cargar datos
+  // Show an error banner if data fetching fails
   if (error) {
     return (
       <div className="w-full flex justify-center p-10 md:px-24 md:py-16 mt-16">
@@ -88,7 +88,7 @@ export default function Home() {
     );
   }
 
-  // Muestra los placeholders de carga mientras se obtienen los datos
+  // Show loading skeletons while data is being fetched
   if (isLoading) {
     return (
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 gap-y-12 p-10 md:px-24 md:py-16 mt-16">
@@ -105,21 +105,21 @@ export default function Home() {
 
   return (
     <div className="w-full flex flex-col gap-8 p-10 md:px-24 md:py-16 mt-16">
-      {/* Barra de búsqueda */}
+      {/* Search bar component */}
       <SearchBar
         searchQuery={searchQuery}
         handleSearchChange={handleSearchChange}
         handleSearchClick={handleSearchClick}
       />
 
-      {/* Paginación superior */}
+      {/* Top pagination component */}
       <Pagination
         page={page}
         setPage={setPage}
         total_pages={movies?.total_pages ?? 0}
       />
 
-      {/* Banner de resultados vacíos */}
+      {/* Banner for empty results */}
       {!movies?.results.length && (
         <AlertBanner
           variant="info"
@@ -128,14 +128,14 @@ export default function Home() {
         />
       )}
 
-      {/* Lista de películas */}
+      {/* Movie list grid */}
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {movies?.results.map((movie) => (
+        {movies?.results.map((movie: MovieInterface) => (
           <MovieItem key={`movie-${movie.id}`} movie={movie} />
         ))}
       </div>
 
-      {/* Paginación inferior */}
+      {/* Bottom pagination component */}
       <Pagination
         page={page}
         setPage={setPage}

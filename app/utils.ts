@@ -14,12 +14,6 @@ export const formatDate = (
     month: "short",
     day: "numeric",
   };
-
-  const date = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
-
-  if (Number.isNaN(date.getTime())) {
-    throw new Error("Invalid date provided");
-  }
-
+  const date = new Date(dateInput);
   return date.toLocaleDateString(locale, options);
 };
