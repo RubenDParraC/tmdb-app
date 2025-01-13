@@ -10,6 +10,8 @@ import type { MovieInterface } from "@/app/interfaces";
 import MovieItem from "@/components/movie-item/movie-item";
 import AlertBanner from "@/components/alert-banner/alert-banner";
 import Skeleton from "@/components/skeleton/skeleton";
+import SearchBar from "@/components/search-bar/search-bar";
+import Pagination from "@/components/pagination/pagination";
 
 // external components
 import { MdFavorite } from "react-icons/md";
@@ -19,10 +21,41 @@ import { useLanguage } from "@/context/language-context/language-context";
 
 function Favorites() {
   const { language } = useLanguage();
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [movies, setMovies] = useState<MovieInterface[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const moviesPerPage = 20;
 
+  /**
+   * Handles the search bar input change.
+   * @param e - Input change event.
+   */
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  /**
+   * Activates search based on the entered query.
+   */
+  const handleSearchClick = () => {
+    if (searchQuery.trim() === "") {
+      const storedMovies = JSON.parse(
+        localStorage.getItem("favorites") || "[]"
+      ) as MovieInterface[];
+      setMovies(storedMovies);
+    } else {
+      setMovies(
+        movies.filter((movie) =>
+          movie.title.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+    }
+    setPage(1);
+  };
+
+  // Get movies of localstorage
   useEffect(() => {
     try {
       if (typeof window !== "undefined") {
@@ -37,6 +70,24 @@ function Favorites() {
       setIsLoading(false);
     }
   }, []);
+
+  // Paginate movies
+  const displayedMovies = movies.slice(
+    (page - 1) * moviesPerPage,
+    page * moviesPerPage
+  );
+
+  // SEO: Dynamically update page title and meta description
+  useEffect(() => {
+    document.title = t("favorites.info_title", language);
+    const metaDescription = document.querySelector("meta[name='description']");
+    if (metaDescription) {
+      metaDescription.setAttribute(
+        "content",
+        t("favorites.info_description", language)
+      );
+    }
+  }, [language]);
 
   // Show an error banner if an error occurs
   if (error) {
@@ -79,7 +130,6 @@ function Favorites() {
     );
   }
 
-  // Render the list of favorite movies
   return (
     <div className="w-full flex flex-col gap-8 p-10 md:px-24 md:py-16 mt-16">
       {/* Section title with icon */}
@@ -89,12 +139,32 @@ function Favorites() {
           {t("favorites.info_title", language)}
         </h1>
       </div>
+      <SearchBar
+        searchQuery={searchQuery}
+        handleSearchChange={handleSearchChange}
+        handleSearchClick={handleSearchClick}
+      />
+
+      {/* Top pagination component */}
+      <Pagination
+        page={page}
+        setPage={setPage}
+        total_pages={Math.ceil(movies.length / moviesPerPage)}
+      />
+
       {/* Grid of movies */}
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {movies.map((movie: MovieInterface) => (
+        {displayedMovies.map((movie: MovieInterface) => (
           <MovieItem key={`movie-${movie.id}`} movie={movie} />
         ))}
       </div>
+
+      {/* Bottom pagination component */}
+      <Pagination
+        page={page}
+        setPage={setPage}
+        total_pages={Math.ceil(movies.length / moviesPerPage)}
+      />
     </div>
   );
 }
