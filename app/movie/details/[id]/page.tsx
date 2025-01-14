@@ -261,7 +261,6 @@ function MovieDetails({ params }: { params: Promise<MovieDetailsParams> }) {
           src={`https://www.youtube.com/embed/${selectedTrailer}`}
           title="YouTube video player"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
         />
       </Modal>
       <Modal

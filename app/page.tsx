@@ -114,7 +114,7 @@ export default function Home() {
   }
 
   return (
-    <div className="w-screen flex flex-col gap-8 p-10 md:px-24 md:py-16 mt-16">
+    <div className="w-full flex flex-col gap-8 p-10 md:px-24 md:py-16 mt-16">
       {/* Search bar component */}
       <SearchBar
         searchQuery={searchQuery}
