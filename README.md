@@ -89,7 +89,7 @@ Para desplegar la aplicación, utilicé la plataforma Vercel.
 ## Recursos
 
 - [Documentación oficial de Next.js](https://nextjs.org/docs)
-- [API de The Movie Database (TMDb)](https://www.themoviedb.org/documentation/api)
+- [API de The Movie Database (TMDb)](https://developer.themoviedb.org/docs/getting-started)
 
 ---
 
