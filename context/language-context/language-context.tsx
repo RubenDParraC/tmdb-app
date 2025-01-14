@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 
 // Importing types to improve type safety and code clarity
 import type React from "react";
@@ -18,6 +24,15 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   // Using useState hook to manage the current language state in the app. The initial language is set to 'ES' (Spanish).
   const [language, setLanguage] = useState<Language>("ES");
+
+  useEffect(() => {
+    const languageStorage = localStorage.getItem("language");
+    setLanguage(languageStorage === "EN" ? "EN" : "ES");
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("language", language);
+  }, [language]);
 
   return (
     // Provides the context to child components, passing both the current language and the function to change it.

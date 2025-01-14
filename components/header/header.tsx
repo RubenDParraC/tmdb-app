@@ -33,6 +33,11 @@ function Header() {
   };
 
   useEffect(() => {
+    const languageStorage = localStorage.getItem("language");
+    setEnabled(languageStorage === "EN");
+  }, []);
+
+  useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 

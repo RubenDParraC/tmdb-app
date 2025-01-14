@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { t } from "@/i18n/i18n";
 
 // types
@@ -21,12 +22,45 @@ import { useLanguage } from "@/context/language-context/language-context";
 
 function Favorites() {
   const { language } = useLanguage();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [movies, setMovies] = useState<MovieInterface[]>([]);
+  const [allMovies, setAllMovies] = useState<MovieInterface[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const moviesPerPage = 20;
+
+  // Get movies from localstorage
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const storedMovies = JSON.parse(
+          localStorage.getItem("favorites") || "[]"
+        ) as MovieInterface[];
+        setMovies(storedMovies);
+        setAllMovies(storedMovies); // Save all movies
+      }
+    } catch {
+      setError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Load search query from URL on component mount
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search).get("queryFav");
+    if (query) {
+      setSearchQuery(query);
+      // Call the search function to filter movies
+      setMovies(
+        allMovies.filter((movie) =>
+          movie.title.toLowerCase().includes(query.toLowerCase())
+        )
+      );
+    }
+  }, [allMovies]);
 
   /**
    * Handles the search bar input change.
@@ -41,35 +75,20 @@ function Favorites() {
    */
   const handleSearchClick = () => {
     if (searchQuery.trim() === "") {
-      const storedMovies = JSON.parse(
-        localStorage.getItem("favorites") || "[]"
-      ) as MovieInterface[];
-      setMovies(storedMovies);
+      setMovies(allMovies); // Show all movies again
+      router.push("/favorites");
     } else {
       setMovies(
-        movies.filter((movie) =>
+        allMovies.filter((movie) =>
           movie.title.toLowerCase().includes(searchQuery.toLowerCase())
         )
       );
+      const params = new URLSearchParams();
+      params.set("queryFav", searchQuery);
+      router.push(`/favorites/?${params.toString()}`);
     }
     setPage(1);
   };
-
-  // Get movies of localstorage
-  useEffect(() => {
-    try {
-      if (typeof window !== "undefined") {
-        const storedMovies = JSON.parse(
-          localStorage.getItem("favorites") || "[]"
-        ) as MovieInterface[];
-        setMovies(storedMovies);
-      }
-    } catch {
-      setError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
 
   // Paginate movies
   const displayedMovies = movies.slice(
@@ -120,7 +139,12 @@ function Favorites() {
   // Show alert banner if no favorites are found
   if (!movies.length) {
     return (
-      <div className="w-full flex justify-center p-10 md:px-24 md:py-16 mt-16">
+      <div className="w-screen flex flex-col justify-center gap-8 p-10 md:px-24 md:py-16 mt-16">
+        <SearchBar
+          searchQuery={searchQuery}
+          handleSearchChange={handleSearchChange}
+          handleSearchClick={handleSearchClick}
+        />
         <AlertBanner
           variant="info"
           title={t("favorites.info_title", language)}

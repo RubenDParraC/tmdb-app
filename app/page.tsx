@@ -17,15 +17,27 @@ import { useLanguage } from "@/context/language-context/language-context";
 
 // Types
 import type { MovieInterface, MovieListInterface } from "./interfaces";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { language } = useLanguage();
+  const router = useRouter();
 
   // State for pagination and search
   const [page, setPage] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeQuery, setActiveQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
+
+  // Load search query from URL on component mount
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search).get("query");
+    if (query) {
+      setSearchQuery(query);
+      setActiveQuery(query);
+      setIsSearching(true);
+    }
+  }, []);
 
   // Fetching movie data
   const {
@@ -54,25 +66,23 @@ export default function Home() {
   }, [isSearching, activeQuery, language]);
 
   /**
-   * Handles the search bar input change.
-   * @param e - Input change event.
-   */
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
-
-  /**
-   * Activates search based on the entered query.
+   * Handles the search action.
    */
   const handleSearchClick = () => {
     if (searchQuery.trim() === "") {
       setIsSearching(false);
       setActiveQuery("");
       setPage(1);
+      router.push("/");
     } else {
       setIsSearching(true);
       setActiveQuery(searchQuery);
       setPage(1);
+
+      // Update the query param in the URL
+      const params = new URLSearchParams();
+      params.set("query", searchQuery);
+      router.push(`/?${params.toString()}`);
     }
   };
 
@@ -104,11 +114,11 @@ export default function Home() {
   }
 
   return (
-    <div className="w-full flex flex-col gap-8 p-10 md:px-24 md:py-16 mt-16">
+    <div className="w-screen flex flex-col gap-8 p-10 md:px-24 md:py-16 mt-16">
       {/* Search bar component */}
       <SearchBar
         searchQuery={searchQuery}
-        handleSearchChange={handleSearchChange}
+        handleSearchChange={(e) => setSearchQuery(e.target.value)}
         handleSearchClick={handleSearchClick}
       />
 

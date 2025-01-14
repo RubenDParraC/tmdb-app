@@ -14,12 +14,23 @@ function SearchBar({
 }: SearchBarTypes) {
   const { language } = useLanguage(); // Get the current language from the context
 
+  /**
+   * Handles key press event on the search input.
+   * If the Enter key is pressed, triggers the search action.
+   */
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearchClick();
+    }
+  };
+
   return (
     <div className="w-full flex flex-col md:flex-row items-center justify-center gap-5">
       <input
         type="text"
         value={searchQuery}
         onChange={handleSearchChange} // Update the search query when input changes
+        onKeyPress={handleKeyPress} // Trigger search on Enter key press
         placeholder={t("search_bar.placeholder", language)} // Placeholder text based on language
         className="p-3 w-full border-2 border-purple-600 rounded-2xl bg-slate-600 text-white"
       />
